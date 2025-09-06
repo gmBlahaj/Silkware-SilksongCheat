@@ -65,8 +65,10 @@ To build the executable yourself, follow these steps:
 
     *   **On Windows:**
 
-        ```cmd
-        build-windows.bat
+        **Prerequisite:** Install [Microsoft Visual C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/). When installing, ensure both the "Desktop development with C++" and "Python development" workloads are selected. After installation, restart your computer.
+
+        ```powershell
+        .\build-windows.ps1
         ```
 
     Just follow the steps the script tells you anyways.

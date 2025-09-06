@@ -5,3 +5,4 @@ silkware/__pycache__
 build/
 dist/
 Silkware.spec
+log.txt
