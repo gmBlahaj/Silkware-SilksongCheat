@@ -1,6 +1,5 @@
 venv/
 original/
-config/config.json
 silkware/__pycache__
 build/
 dist/
