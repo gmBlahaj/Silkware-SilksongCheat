@@ -1,0 +1,3 @@
+PyMemoryEditor==1.5.24
+psutil==7.0.0
+pynput==1.8.1
