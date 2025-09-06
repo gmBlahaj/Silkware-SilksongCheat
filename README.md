@@ -3,7 +3,10 @@
 
 # Silkware - Silksong "Trainer"
 
-A cross-platform "Trainer" for the game *Hollow Knight: Silksong*, built with Python.
+A cross-platform "Trainer" for the game *Hollow Knight: Silksong*, built with Python. It is based on [stepbrotrip's Silkware](https://github.com/stepbrotrip/Silkware-SilksongCheat); I just refined it a bit to make it more usable for me.
+
+
+
 
 ## Features
 
