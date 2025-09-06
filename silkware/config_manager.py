@@ -1,9 +1,18 @@
 import json
 import os
 import logging
+import sys
 from . import config
 
-CONFIG_DIR = os.path.join(os.path.dirname(__file__), "config")
+if sys.platform == "win32":
+    CONFIG_BASE_DIR = os.path.join(os.environ.get('APPDATA', os.path.expanduser('~')), "Silkware")
+elif sys.platform.startswith("linux"):
+    CONFIG_BASE_DIR = os.path.join(os.path.expanduser('~'), ".config", "silkware")
+else:
+    # Fallback 
+    CONFIG_BASE_DIR = os.path.join(os.path.expanduser('~'), ".silkware")
+
+CONFIG_DIR = CONFIG_BASE_DIR
 CONFIG_FILE = os.path.join(CONFIG_DIR, "config.json")
 
 def load_config():
