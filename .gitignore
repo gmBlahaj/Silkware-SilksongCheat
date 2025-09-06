@@ -4,4 +4,4 @@ config/
 silkware/__pycache__
 build/
 dist/
-build.sh
+Silkware.spec
