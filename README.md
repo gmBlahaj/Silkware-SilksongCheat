@@ -36,7 +36,40 @@ python3 main.py
 
 Use the precompiled Binaries from the Releases Section (Soon to come!)
 
+## Build it yourself
 
+To build the executable yourself, follow these steps:
+
+1.  **Clone the repository:**
+
+    ```sh
+    git clone https://github.com/your-repo/Silkware-SilksongCheat.git
+    cd Silkware-SilksongCheat
+    ```
+
+2.  **Set up a virtual environment and install dependencies:**
+
+    ```sh
+    python3 -m venv venv
+    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+    pip install -r requirements.txt
+    ```
+
+3.  **Build the executable:**
+
+    *   **On Linux:**
+
+        ```sh
+        ./build-linux.sh
+        ```
+
+    *   **On Windows:**
+
+        ```cmd
+        build-windows.bat
+        ```
+
+    Just follow the steps the script tells you anyways.
 
 ## Current Issues
 
