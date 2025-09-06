@@ -43,9 +43,21 @@ def get_module_base_address(process, module_name):
             return None
         return None
     elif sys.platform == "win32":
-        for module in process.list_modules():
-            if module.name.lower() == module_name.lower():
-                return module.base_address
+        h_process = win32api.OpenProcess(
+            win32con.PROCESS_QUERY_INFORMATION | win32con.PROCESS_VM_READ,
+            False,
+            process.pid
+        )
+        if not h_process:
+            return None
+        try:
+            modules = win32process.EnumProcessModules(h_process)
+            for module_handle in modules:
+                module_path = win32process.GetModuleFileNameEx(h_process, module_handle)
+                if module_path.lower().endswith(module_name.lower()):
+                    return module_handle
+        finally:
+            win32api.CloseHandle(h_process)
         return None
     return None
 
