@@ -1,8 +1,15 @@
 import logging
 import sys
+import subprocess
 
 if sys.platform == "win32":
-    import psutil
+    try:
+        import win32api
+        import win32process
+        import win32con
+    except ImportError:
+        print("The 'pywin32' library is required for Windows. Please install it by running: pip install pywin32")
+        sys.exit(1)
 
 def get_process_name(pid):
     if sys.platform.startswith("linux"):
@@ -13,8 +20,14 @@ def get_process_name(pid):
             return None
     elif sys.platform == "win32":
         try:
-            return psutil.Process(pid).name()
-        except psutil.NoSuchProcess:
+            h_process = win32api.OpenProcess(win32con.PROCESS_QUERY_INFORMATION | win32con.PROCESS_VM_READ, False, pid)
+            if h_process:
+                try:
+                    exe_path = win32process.GetModuleFileNameEx(h_process, 0)
+                    return exe_path.split('\\')[-1]
+                finally:
+                    win32api.CloseHandle(h_process)
+        except Exception:
             return None
     return None
 
@@ -49,3 +62,18 @@ def resolve_pointer_chain(process, base, offsets):
     except Exception as e:
         logging.error(f"Could not resolve pointer chain: {e}")
         return None
+
+def get_pid_by_name(process_name):
+    if sys.platform.startswith("linux"):
+        try:
+            pid_str = subprocess.check_output(["pidof", "-s", process_name]).strip()
+            return int(pid_str)
+        except (subprocess.CalledProcessError, ValueError, FileNotFoundError):
+            return None
+    elif sys.platform == "win32":
+        pids = win32process.EnumProcesses()
+        for pid_candidate in pids:
+            name = get_process_name(pid_candidate)
+            if name and process_name.lower() in name.lower():
+                return pid_candidate
+    return None

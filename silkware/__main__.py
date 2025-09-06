@@ -7,17 +7,13 @@ from . import config
 from .gui import CheatEngine
 from .error_window import show_error
 from . import config_manager
+from .utils import get_process_name, get_pid_by_name
 
 # --- logging setup ---
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s: %(message)s', datefmt='%H:%M:%S')
 
 def main():
     config_manager.load_config()
-    try:
-        import psutil
-    except ImportError:
-        print("The 'psutil' library is required. Please install it by running: pip install psutil")
-        sys.exit(1)
 
     parser = argparse.ArgumentParser(description="Silkware - A Silksong cheat tool.")
     parser.add_argument("--pid", type=int, help="The process ID of the Silksong process.")
@@ -27,17 +23,12 @@ def main():
     pid = args.pid
 
     if not pid:
-        if sys.platform == "win32":
-            logging.info(f"Searching for process: '{args.process_name}'")
-            for proc in psutil.process_iter(['pid', 'name']):
-                if args.process_name.lower() in proc.info.get('name', '').lower():
-                    pid = proc.info['pid']
-                    logging.info(f"Found process. PID: {pid}, Name: {proc.info.get('name')}")
-                    break
-        else:  
-            pid = None
+        logging.info(f"Searching for process: '{args.process_name}'")
+        pid = get_pid_by_name(args.process_name)
+        if pid:
+            logging.info(f"Found process. PID: {pid}, Name: {get_process_name(pid)}")
 
-    if not pid and sys.platform == 'win32':
+    if not pid:
         error_title = "Process Not Found"
         error_message = f"""Process '{args.process_name}' not found.\n\nMake sure Silksong is running."""
         show_error(error_title, error_message)

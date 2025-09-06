@@ -1,3 +1,4 @@
 PyMemoryEditor==1.5.24
-psutil==7.0.0
+psutil==7.0.0; sys_platform == "linux"
 pynput==1.8.1
+pywin32>=306; sys_platform == "win32"

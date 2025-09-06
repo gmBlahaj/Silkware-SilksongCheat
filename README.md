@@ -68,10 +68,17 @@ To build the executable yourself, follow these steps:
         **Prerequisite:** Install [Microsoft Visual C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/). When installing, ensure both the "Desktop development with C++" and "Python development" workloads are selected. After installation, restart your computer.
 
         ```powershell
-        .\build-windows.ps1
-        ```
+        # Open "Developer PowerShell for VS" (or "x64 Native Tools Command Prompt for VS") from your Start Menu.
+        # Navigate to your project directory.
 
-    Just follow the steps the script tells you anyways.
+        # If you encounter a "cannot be loaded because running scripts is disabled on this system" error,
+        # run the following command in an Administrator PowerShell (once per user):
+        # Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+        
+        .\build-windows.ps1 
+      
+        ```
 
 ## Current Issues
 
