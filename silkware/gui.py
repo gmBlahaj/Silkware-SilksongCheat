@@ -49,8 +49,8 @@ class CheatEngine:
         config.health_base = mono_dll + 0x00A030B8
         config.shards_base = mono_dll + 0x00A030B8
         config.soul_base = mono_dll + 0x00763240
-        config.y_base = unity_dll + 0x01F419A0
-        config.x_base = unity_dll + 0x01F41A68
+        config.y_base = unity_dll + 0x01F41DB8
+        config.x_base = unity_dll + 0x01F6BFA0
         config.superfly_addr = unity_dll + 0xEBB8AA
 
         self.superfly_orig_bytes = None

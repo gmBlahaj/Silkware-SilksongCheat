@@ -80,9 +80,6 @@ To build the executable yourself, follow these steps:
       
         ```
 
-## Current Issues
-
-- **Better Flight** is very experimental and doesn't exactly work too well
 
 </br>
 
