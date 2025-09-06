@@ -29,10 +29,22 @@ def main():
             logging.info(f"Found process. PID: {pid}, Name: {get_process_name(pid)}")
 
     if not pid:
-        error_title = "Process Not Found"
-        error_message = f"""Process '{args.process_name}' not found.\n\nMake sure Silksong is running."""
-        show_error(error_title, error_message)
-        logging.error("Process not found.")
+        if sys.platform.startswith("linux"):
+            from .pid_input_window import ask_for_pid
+            import tkinter as tk
+            root = tk.Tk()
+            root.withdraw()
+            pid = ask_for_pid(root)
+            root.destroy()
+        else:
+            error_title = "Process Not Found"
+            error_message = f"""Process '{args.process_name}' not found.\n\nMake sure Silksong is running."""
+            show_error(error_title, error_message)
+            logging.error("Process not found.")
+            sys.exit(1)
+
+    if not pid:
+        logging.error("No PID provided or found. Exiting.")
         sys.exit(1)
 
     try:
