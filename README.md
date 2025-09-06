@@ -34,7 +34,7 @@ python3 main.py
 ## Usage (Option B)
 
 
-Use the precompiled Binaries from the Releases Section
+Use the precompiled Binaries from the Releases Section (Soon to come!)
 
 
 
@@ -44,6 +44,6 @@ Use the precompiled Binaries from the Releases Section
 
 </br>
 
-## Disclaimer
+### Disclaimer
 
 This tool modifies game memory and is intended for educational purposes and personal use only. Use at your own risk. The developers are not responsible for any game crashes, corrupted save files, or other adverse effects.
