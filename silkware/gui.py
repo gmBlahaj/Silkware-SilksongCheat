@@ -3,6 +3,7 @@ from pynput import keyboard
 import threading
 import logging
 import sys
+import pygame
 
 from . import config
 from . import utils
@@ -63,6 +64,10 @@ class CheatEngine:
         self.superfly = tk.BooleanVar(value=False)
         self.speed = tk.BooleanVar(value=False)
         self.flight = tk.BooleanVar(value=False)
+        self.do_save_items = tk.BooleanVar(value=False)
+
+        self.rosarys = 0
+        self.shells = 0
 
         self.cheat_vars = {
             "Inf Rosary": self.do_rosary,
@@ -71,7 +76,8 @@ class CheatEngine:
             "Inf Soul": self.do_soul,
             "Super Speed": self.speed,
             "Flight": self.flight,
-            "Better Flight": self.superfly
+            "Better Flight": self.superfly,
+            "No Losing Items": self.do_save_items
         }
         self.hotkeys = {str_to_key(k): v for k, v in config.HOTKEY_CONFIG.items()}
         self.pressed_keys = set()
@@ -85,6 +91,11 @@ class CheatEngine:
         self.menu_visible = True
         self.listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
         self.listener.start()
+
+        pygame.init()
+        pygame.joystick.init()
+        self.joysticks = [pygame.joystick.Joystick(i) for i in range(pygame.joystick.get_count())]
+        for j in self.joysticks: j.init()
 
     def on_press(self, key):
         if key == keyboard.KeyCode.from_char('.'):
@@ -185,6 +196,7 @@ class CheatEngine:
         self.make_check("Super Speed", self.speed, "Fast left/right movement", 2, 0)
         self.make_check("Flight", self.flight, "Vertical flight only", 2, 1)
         self.make_check("Better Fly", self.superfly, "Fly + move fast (NOP applied) Sometimes breaks when going through objects", 3, 0)
+        self.make_check("No Losing Items", self.do_save_items, "Saves rosary beads and shell shards after death", 3, 1)
 
     def make_hotkey_frame(self):
        
