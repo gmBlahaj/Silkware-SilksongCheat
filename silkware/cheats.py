@@ -20,8 +20,8 @@ def _do_flight(engine):
         y_addr = utils.resolve_pointer_chain(engine.process, config.y_base, config.y_offsets)
         if y_addr:
             cy = engine.process.read_process_memory(y_addr, float, 4)
-            if keyboard.Key.up in engine.pressed_keys:    cy += 1
-            if keyboard.Key.down in engine.pressed_keys:  cy -= 1
+            if keyboard.Key.up in engine.pressed_keys:    cy += 0.9
+            if keyboard.Key.down in engine.pressed_keys:  cy -= 0.9
             engine.process.write_process_memory(y_addr, float, 4, cy)
     except Exception as e: 
         logging.error(f"Error in _do_flight: {e}")
@@ -43,6 +43,16 @@ def toggle_superfly(engine):
         except Exception as e:
             logging.error(f"Error disabling No Clip: {e}")
 
+def set_gravity(engine, enable: bool):
+    try:
+        if enable:
+            if engine.superfly_orig_bytes:
+                engine.process.write_process_memory(config.superfly_addr, bytes, 5, engine.superfly_orig_bytes)
+        else:
+            engine.process.write_process_memory(config.superfly_addr, bytes, 5, b'\x90' * 5)
+    except Exception as e:
+        logging.error(f"Error toggling gravity: {e}")
+
 def _do_superfly(engine):
     try:
         x_addr = utils.resolve_pointer_chain(engine.process, config.x_base, config.x_offsets)
@@ -50,13 +60,31 @@ def _do_superfly(engine):
         if x_addr and y_addr:
             cx = engine.process.read_process_memory(x_addr, float, 4)
             cy = engine.process.read_process_memory(y_addr, float, 4)
-            if keyboard.Key.left in engine.pressed_keys:  cx -= config.X_SPD
-            if keyboard.Key.right in engine.pressed_keys: cx += config.X_SPD
-            if keyboard.Key.up in engine.pressed_keys:    cy += .5
-            if keyboard.Key.down in engine.pressed_keys:  cy -= .5
+
+            moving_lateral = False
+
+            if keyboard.Key.left in engine.pressed_keys:
+                cx -= 1
+                cy += 0.9
+                moving_lateral = True
+            if keyboard.Key.right in engine.pressed_keys:
+                cx += 1
+                cy += 0.9
+                moving_lateral = True
+            if keyboard.Key.up in engine.pressed_keys:
+                cy += 0.5
+            if keyboard.Key.down in engine.pressed_keys:
+                cy -= 0.5
+
             engine.process.write_process_memory(x_addr, float, 4, cx)
             engine.process.write_process_memory(y_addr, float, 4, cy)
-    except Exception as e: 
+
+            if moving_lateral:
+                set_gravity(engine, enable=True)
+            else:
+                set_gravity(engine, enable=False)
+
+    except Exception as e:
         logging.error(f"Error in _do_superfly: {e}")
 
 def _cheat_loop(engine):
